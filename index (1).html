@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Epilepsia Temporal Mesial 3D | Anatomía y propagación</title>
+  <meta name="description" content="Versión en español del atlas interactivo Brain Project, conservando el modelo 3D original." />
+  <!-- Conserva exactamente los recursos anatómicos del proyecto original -->
+  <base href="https://itayinbarr.github.io/brainproject/" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Etiqueta discreta para dejar claro que es la versión en español y mantener atribución */
+    #es-credit {
+      position: fixed; right: 10px; bottom: 8px; z-index: 9999;
+      font: 500 10px/1.2 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color: rgba(233,237,246,.62); background: rgba(8,11,18,.34);
+      border: 1px solid rgba(255,255,255,.08); backdrop-filter: blur(8px);
+      border-radius: 999px; padding: 5px 8px; pointer-events: auto;
+    }
+    #es-credit a { color: inherit; text-decoration: none; }
+    #es-credit a:hover { color: rgba(255,255,255,.95); }
+  </style>
+
+<style>
+  :root{--etm-bg:rgba(7,13,20,.92);--etm-b:#243747;--etm-t:#eef7fb;--etm-m:#9fb5c4;--etm-a:#6fe7df;--etm-r:#ff7b89;--etm-y:#ffd38a;}
+  #etm-launch{position:fixed;left:14px;bottom:14px;z-index:10020;border:1px solid rgba(111,231,223,.38);background:rgba(10,19,27,.88);color:var(--etm-t);padding:9px 12px;border-radius:999px;font:700 12px/1 system-ui;box-shadow:0 8px 26px rgba(0,0,0,.32);cursor:pointer;backdrop-filter:blur(10px)}
+  #etm-launch:hover{background:#122532}
+  #etm-panel{position:fixed;right:14px;top:62px;z-index:10010;width:min(360px,calc(100vw - 28px));max-height:calc(100vh - 86px);overflow:auto;background:var(--etm-bg);border:1px solid var(--etm-b);border-radius:18px;color:var(--etm-t);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 20px 60px rgba(0,0,0,.45);backdrop-filter:blur(16px);transition:.2s ease}
+  #etm-panel.etm-hidden{opacity:0;transform:translateY(8px) scale(.98);pointer-events:none}
+  .etm-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;background:rgba(7,13,20,.96);border-bottom:1px solid var(--etm-b);z-index:2}
+  .etm-title{font-weight:800;font-size:13px;letter-spacing:.02em}.etm-sub{display:block;color:var(--etm-m);font-size:10px;font-weight:500;margin-top:2px}
+  .etm-x{border:0;background:transparent;color:#cbd8df;font-size:18px;cursor:pointer}
+  .etm-body{padding:12px 12px 16px}.etm-sec{border:1px solid rgba(159,181,196,.14);border-radius:14px;padding:10px;margin-bottom:10px;background:rgba(255,255,255,.025)}
+  .etm-sec h3{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:#bcd0dc}.etm-note{font-size:11px;line-height:1.42;color:var(--etm-m);margin:6px 0 0}
+  .etm-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.etm-btn{appearance:none;border:1px solid #294352;background:#101d27;color:#eff8fb;border-radius:10px;padding:8px 8px;font-size:11px;line-height:1.2;cursor:pointer;text-align:left}.etm-btn:hover{border-color:#4f8295;background:#142734}.etm-btn.primary{background:#123235;border-color:#29736e}.etm-btn.route{background:#241a2d;border-color:#553867}.etm-btn.danger{background:#30191d;border-color:#6f3038}.etm-btn.wide{grid-column:1/-1;text-align:center;font-weight:700}
+  .etm-route{display:flex;gap:5px;align-items:center;flex-wrap:wrap;font-size:10px;color:#d9e6ec;line-height:1.35;margin:7px 0}.etm-node{padding:3px 6px;border-radius:999px;background:#15232d;border:1px solid #2a4251}.etm-arrow{color:#6fe7df}.etm-status{position:fixed;left:50%;bottom:18px;z-index:10030;transform:translateX(-50%) translateY(20px);opacity:0;background:rgba(6,12,18,.94);color:#f4fbff;border:1px solid #314b5d;border-radius:999px;padding:8px 12px;font:600 11px system-ui;transition:.2s;pointer-events:none;max-width:80vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.etm-status.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .etm-kicker{color:var(--etm-a);font-weight:700}.etm-credit{font-size:9px;line-height:1.45;color:#7892a1}.etm-credit a{color:#9ed9d5}
+
+  .etm-acc{border:1px solid rgba(159,181,196,.14);border-radius:12px;margin:7px 0;background:rgba(255,255,255,.018);overflow:hidden}
+  .etm-acc>summary{list-style:none;cursor:pointer;padding:9px 10px;font-size:11px;font-weight:800;color:#dbe9ef;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .etm-acc>summary::-webkit-details-marker{display:none}.etm-acc>summary:after{content:'+';font-size:15px;color:#7fa6b7}.etm-acc[open]>summary:after{content:'−'}
+  .etm-acc-body{padding:0 9px 9px}.etm-mini{font-size:10px;line-height:1.42;color:#9fb5c4;margin:4px 0 8px}
+  .etm-info{border:1px solid rgba(111,231,223,.24);background:rgba(14,37,42,.34);border-radius:12px;padding:9px 10px;margin:8px 0 0}
+  .etm-info strong{display:block;color:#bff7f2;font-size:11px;margin-bottom:3px}.etm-info p{margin:0;color:#b9cbd5;font-size:10px;line-height:1.48}
+  .etm-tag{display:inline-flex;align-items:center;gap:4px;border:1px solid #385465;border-radius:999px;padding:2px 6px;font-size:9px;color:#bcd0dc;margin:2px 2px 0 0;background:#111f29}
+  .etm-tag.warn{border-color:#6b5531;color:#f1d8a8;background:#2a2114}.etm-tag.ok{border-color:#2f665f;color:#b8f1e9;background:#102725}
+  .etm-orient{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:7px}.etm-orient div{border:1px solid #263d4b;border-radius:8px;padding:5px;text-align:center;font-size:9px;color:#9fb5c4;background:#0d1820}
+  .etm-ref{font-size:9px;line-height:1.4;color:#7892a1;margin-top:5px}.etm-ref a{color:#9ed9d5}
+  .etm-btn[data-concept="1"]{border-style:dashed;color:#d7c7a4;background:#231f18}
+  .etm-btn[data-info-key]{position:relative;padding-right:22px}.etm-btn[data-info-key]:after{content:'i';position:absolute;right:7px;top:7px;width:13px;height:13px;border-radius:50%;display:grid;place-items:center;border:1px solid #527487;color:#9fc4d3;font-size:8px;font-weight:800}
+  @media(max-width:760px){#etm-panel{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-height:62vh;border-radius:18px}#etm-launch{bottom:10px;left:10px}.etm-grid{grid-template-columns:1fr 1fr}}
+</style>
+
+</head>
+<body>
+  <div id="root"></div>
+  <div id="es-credit"><a href="https://github.com/itayinbarr/brainproject" target="_blank" rel="noopener">Brain Project · Itay Inbar · modelo original</a></div>
+
+
+  <button id="etm-launch" type="button">🧠 Modo ETM</button>
+  <aside id="etm-panel" class="etm-hidden" aria-label="Panel de epilepsia temporal mesial">
+    <div class="etm-head"><div class="etm-title">Epilepsia temporal mesial<span class="etm-sub">Anatomía completa + propagación</span></div><button class="etm-x" id="etm-close" aria-label="Cerrar">×</button></div>
+    <div class="etm-body">
+      <section class="etm-sec">
+        <h3>Preparar vista</h3>
+        <div class="etm-grid">
+          <button class="etm-btn primary" data-action="deep">Corteza transparente</button>
+          <button class="etm-btn" data-action="both">Ambos hemisferios</button>
+          <button class="etm-btn" data-action="left">Hemisferio izquierdo</button>
+          <button class="etm-btn" data-action="right">Hemisferio derecho</button>
+          <button class="etm-btn wide" data-action="reset">Restablecer atlas</button>
+        </div>
+        <p class="etm-note">La amígdala y el hipocampo son profundos. Para mostrarlos en exposición conviene reducir la opacidad cortical y aislar la estructura.</p>
+      </section>
+
+      <section class="etm-sec">
+        <h3>Anatomía mesial temporal</h3>
+        <p class="etm-note">Este bloque reúne la anatomía que debes poder señalar antes de explicar las rutas. Los botones aíslan la estructura en el atlas; el icono <b>i</b> muestra su relación anatómica.</p>
+
+        <details class="etm-acc" open>
+          <summary>Núcleo anatómico del proyecto</summary>
+          <div class="etm-acc-body">
+            <div class="etm-grid">
+              <button class="etm-btn" data-structure="hippocampus" data-info-key="hippocampus">Hipocampo</button>
+              <button class="etm-btn" data-structure="amygdaloid body" data-info-key="amygdala">Amígdala</button>
+              <button class="etm-btn" data-structure="parahippocampal" data-info-key="parahippocampal">Giro parahipocampal</button>
+              <button class="etm-btn" data-structure="uncus" data-info-key="uncus">Uncus</button>
+              <button class="etm-btn" data-structure="temporal pole" data-info-key="temporalpole">Polo temporal</button>
+              <button class="etm-btn" data-structure="fusiform" data-info-key="fusiform">Giro fusiforme</button>
+              <button class="etm-btn" data-structure="inferior temporal gyrus">Giro temporal inferior</button>
+              <button class="etm-btn" data-structure="collateral sulcus">Surco colateral</button>
+            </div>
+            <div class="etm-orient"><div>Anterior → amígdala / polo temporal</div><div>Medial → hipocampo / parahipocampal</div><div>Posterior → cola hipocampal / esplenio</div></div>
+          </div>
+        </details>
+
+        <details class="etm-acc">
+          <summary>Amígdala: subdivisiones que sí tiene el atlas</summary>
+          <div class="etm-acc-body">
+            <div class="etm-grid">
+              <button class="etm-btn" data-structure="lateral nucleus" data-info-key="amygdalaGroups">Grupo lateral</button>
+              <button class="etm-btn" data-structure="basolateral complex" data-info-key="amygdalaGroups">Complejo basolateral</button>
+              <button class="etm-btn" data-structure="central nucleus" data-info-key="amygdalaGroups">Grupo central</button>
+              <button class="etm-btn" data-structure="corticomedial" data-info-key="amygdalaGroups">Grupo corticomedial</button>
+            </div>
+            <p class="etm-mini">Estas cuatro mallas son grupos funcionales derivados del atlas CIT168. No equivalen a una segmentación quirúrgica de todos los núcleos amigdalinos.</p>
+          </div>
+        </details>
+
+        <details class="etm-acc">
+          <summary>Conexiones de sustancia blanca</summary>
+          <div class="etm-acc-body">
+            <div class="etm-grid">
+              <button class="etm-btn" data-structure="fornix" data-info-key="fornix">Fórnix</button>
+              <button class="etm-btn" data-structure="hippocampal commissure" data-info-key="hippocomm">Comisura hipocampal</button>
+              <button class="etm-btn" data-structure="anterior commissure" data-info-key="antcomm">Comisura anterior</button>
+              <button class="etm-btn" data-structure="stria terminalis" data-info-key="stria">Estría terminal</button>
+              <button class="etm-btn" data-structure="cingulum" data-info-key="cingulum">Cíngulo</button>
+              <button class="etm-btn" data-structure="uncinate" data-info-key="uncinate">Fascículo unciforme</button>
+              <button class="etm-btn" data-structure="inferior longitudinal fasciculus" data-info-key="ilf">Fascículo longitudinal inferior</button>
+              <button class="etm-btn" data-structure="inferior fronto-occipital fasciculus">Fascículo fronto-occipital inferior</button>
+              <button class="etm-btn" data-structure="corpus callosum" data-info-key="callosum">Cuerpo calloso</button>
+            </div>
+            <p class="etm-mini">Los tractos registrados en el atlas son representaciones esquemáticas de trayectorias de sustancia blanca; no deben interpretarse como tractografía individual del paciente.</p>
+          </div>
+        </details>
+
+        <details class="etm-acc">
+          <summary>Relaciones profundas y circuito límbico</summary>
+          <div class="etm-acc-body">
+            <div class="etm-grid">
+              <button class="etm-btn" data-structure="thalamus" data-info-key="thalamus">Tálamo</button>
+              <button class="etm-btn" data-structure="anterior nuclei" data-info-key="anteriorThalamus">Núcleos anteriores del tálamo</button>
+              <button class="etm-btn" data-structure="mamillary body" data-info-key="mammillary">Cuerpo mamilar</button>
+              <button class="etm-btn" data-structure="hypothalamus">Hipotálamo</button>
+              <button class="etm-btn" data-structure="cingulate gyrus" data-info-key="cingulateGyrus">Giro del cíngulo</button>
+              <button class="etm-btn" data-structure="lateral ventricle" data-info-key="ventricle">Ventrículo lateral</button>
+              <button class="etm-btn" data-structure="choroid plexus" data-info-key="choroid">Plexo coroideo</button>
+              <button class="etm-btn" data-structure="optic tract">Tracto óptico</button>
+            </div>
+          </div>
+        </details>
+
+        <details class="etm-acc">
+          <summary>Regiones corticales útiles para propagación</summary>
+          <div class="etm-acc-body">
+            <div class="etm-grid">
+              <button class="etm-btn" data-structure="insula" data-info-key="insula">Ínsula</button>
+              <button class="etm-btn" data-structure="orbital" data-info-key="orbitofrontal">Región orbitofrontal</button>
+              <button class="etm-btn" data-structure="superior temporal gyrus">Giro temporal superior</button>
+              <button class="etm-btn" data-structure="middle temporal gyrus">Giro temporal medio</button>
+              <button class="etm-btn" data-structure="inferior temporal gyrus">Giro temporal inferior</button>
+              <button class="etm-btn" data-structure="fusiform">Giro fusiforme</button>
+              <button class="etm-btn" data-structure="parahippocampal">Giro parahipocampal</button>
+              <button class="etm-btn" data-structure="temporal pole">Polo temporal</button>
+            </div>
+          </div>
+        </details>
+
+        <details class="etm-acc">
+          <summary>Vascularización visible en el atlas</summary>
+          <div class="etm-acc-body">
+            <div class="etm-grid">
+              <button class="etm-btn" data-structure="posterior cerebral artery" data-info-key="pca">Arteria cerebral posterior</button>
+              <button class="etm-btn" data-structure="middle cerebral artery">Arteria cerebral media</button>
+              <button class="etm-btn" data-structure="internal carotid artery">Carótida interna</button>
+              <button class="etm-btn" data-structure="basilar artery">Arteria basilar</button>
+            </div>
+            <p class="etm-mini">Se incluyen para orientación anatómica general. El modelo no sustituye una angio-TC, angio-RM ni planificación neuroquirúrgica.</p>
+          </div>
+        </details>
+
+        <details class="etm-acc">
+          <summary>Conceptos importantes que NO están resueltos como mallas finas</summary>
+          <div class="etm-acc-body">
+            <span class="etm-tag warn">CA1–CA4</span><span class="etm-tag warn">Giro dentado</span><span class="etm-tag warn">Subículo</span><span class="etm-tag warn">Alveus</span><span class="etm-tag warn">Cabeza/cuerpo/cola por separado</span>
+            <p class="etm-mini">El Brain Project declara que los subcampos hipocampales no se añadieron como mallas individuales porque la resolución y las licencias disponibles no permiten una representación suficientemente defendible. No los dibujamos artificialmente.</p>
+            <div class="etm-grid">
+              <button class="etm-btn" data-concept="1" data-structure="entorhinal" data-info-key="entorhinal">Corteza entorrinal*</button>
+              <button class="etm-btn" data-concept="1" data-structure="piriform" data-info-key="piriform">Corteza piriforme*</button>
+            </div>
+            <p class="etm-mini">*Son regiones anatómicamente relevantes, pero pueden no existir como mallas independientes en la versión actual del atlas. El buscador solo las mostrará si el modelo las contiene.</p>
+          </div>
+        </details>
+
+        <div id="etm-anat-info" class="etm-info"><strong>Relación anatómica</strong><p>Selecciona una estructura marcada con “i” para ver aquí su ubicación y relaciones.</p></div>
+      </section>
+
+      <section class="etm-sec">
+        <h3>Recorridos anatómicos</h3>
+        <div class="etm-grid">
+          <button class="etm-btn primary wide" data-tour="mesial">▶ Tour temporal mesial</button>
+          <button class="etm-btn primary wide" data-tour="limbic">▶ Tour circuito límbico</button>
+          <button class="etm-btn primary wide" data-tour="commissural">▶ Tour conexiones bilaterales</button>
+        </div>
+        <p class="etm-note">Estos recorridos son de orientación anatómica. No representan por sí mismos una secuencia ictal.</p>
+      </section>
+
+      <section class="etm-sec">
+        <h3>Rutas del proyecto</h3>
+        <button class="etm-btn route wide" data-route="anterior">▶ Recorrer propagación focal anterior</button>
+        <div class="etm-route"><span class="etm-node">Temporal mesial</span><span class="etm-arrow">→</span><span class="etm-node">Polo temporal</span><span class="etm-arrow">→</span><span class="etm-node">Corteza entorrinal*</span></div>
+        <button class="etm-btn route wide" data-route="posterior">▶ Recorrer propagación focal posterior</button>
+        <div class="etm-route"><span class="etm-node">Temporal mesial</span><span class="etm-arrow">→</span><span class="etm-node">Parahipocampal posterior</span><span class="etm-arrow">→</span><span class="etm-node">Fusiforme</span></div>
+        <button class="etm-btn route wide" data-route="bilateral">▶ Recorrer propagación bilateral</button>
+        <div class="etm-route"><span class="etm-node">Temporal mesial der.</span><span class="etm-arrow">→</span><span class="etm-node">Orbitofrontal der.</span><span class="etm-arrow">→</span><span class="etm-node">Orbitofrontal izq.</span><span class="etm-arrow">→</span><span class="etm-node">Temporal mesial izq.</span></div>
+        <button class="etm-btn danger wide" data-action="stop">■ Detener recorrido</button>
+        <p class="etm-note">*Si una región no existe como malla individual en esta versión del atlas, el buscador puede no devolverla. El panel no inventa geometría nueva.</p>
+      </section>
+
+      <section class="etm-sec">
+        <h3>Guía rápida para exposición</h3>
+        <p class="etm-note">1. Cerebro completo para orientación. 2. Corteza transparente. 3. Temporal mesial: uncus, amígdala, hipocampo y giro parahipocampal. 4. Mostrar conexiones: fórnix, cíngulo y comisuras. 5. Activar una ruta ictal y seguir las estaciones. 6. Volver a ambos hemisferios para la propagación bilateral.</p>
+        <p class="etm-note"><b>Frase útil:</b> “Primero ubicamos la anatomía normal y después superponemos sobre ella las rutas de propagación descritas en la literatura”.</p>
+      </section>
+
+      <section class="etm-sec">
+        <h3>Créditos y alcance</h3>
+        <div class="etm-credit">Atlas 3D basado en <a href="https://itayinbarr.github.io/brainproject/" target="_blank" rel="noopener">Brain Project</a>. Código del visor: Apache 2.0. Activos anatómicos 3D: CC BY-SA 4.0, con atribución a Z-Anatomy / BodyParts3D / DBCLS y atlas registrados indicados por el proyecto. Las estructuras profundas y tractos registrados son educativos y aproximados, no para planificación clínica.</div>
+        <div class="etm-ref">Fuentes anatómicas: <a href="https://github.com/itayinbarr/brainproject" target="_blank" rel="noopener">documentación oficial del atlas</a> · <a href="https://www.ncbi.nlm.nih.gov/books/NBK575732/" target="_blank" rel="noopener">anatomía del hipocampo</a> · <a href="https://www.ncbi.nlm.nih.gov/books/NBK537102/" target="_blank" rel="noopener">anatomía de la amígdala</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3420617/" target="_blank" rel="noopener">anatomía del lóbulo temporal</a>.</div>
+      </section>
+    </div>
+  </aside>
+  <div id="etm-status" class="etm-status"></div>
+
+
+  <!-- Dependencias y atlas originales -->
+  <script src="https://unpkg.com/three@0.137.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.137.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://unpkg.com/three@0.137.0/examples/js/loaders/DRACOLoader.js"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <script src="data.js"></script>
+  <script src="systems-data.js"></script>
+  <script src="scene.js"></script>
+  <script src="firebase-analytics.js"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="layers-tree.jsx"></script>
+  <script type="text/babel" src="control-panel.jsx"></script>
+  <script type="text/babel" src="selection-card.jsx"></script>
+  <script type="text/babel" src="narration.jsx"></script>
+  <script type="text/babel" src="lessons.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+
+  <!-- Capa de traducción visual. No sustituye ni redibuja el modelo 3D. -->
+  <script>
+  (() => {
+    'use strict';
+
+    const exact = new Map(Object.entries({
+      // Identidad y navegación
+      'Brain Project': 'Proyecto Cerebro',
+      'Explore': 'Explorar',
+      'Systems': 'Sistemas',
+      'Learn': 'Aprender',
+      'Expand': 'Expandir',
+      'Collapse': 'Contraer',
+      'Focus': 'Enfocar',
+      'Share': 'Compartir',
+      'About': 'Acerca de',
+      'Spin': 'Girar',
+      'Rotate': 'Rotar',
+      'Reset': 'Restablecer',
+      'Close': 'Cerrar',
+      'Back': 'Volver',
+      'Next': 'Siguiente',
+      'Previous': 'Anterior',
+      'Start': 'Iniciar',
+      'Continue': 'Continuar',
+      'Done': 'Listo',
+
+      // Exploración
+      'Hemisphere': 'Hemisferio',
+      'Left': 'Izquierdo',
+      'Both': 'Ambos',
+      'Right': 'Derecho',
+      'Cinematic views': 'Vistas anatómicas',
+      'Whole brain': 'Cerebro completo',
+      'Vasculature': 'Vasculatura',
+      'Circle of Willis': 'Círculo de Willis',
+      'Ventricles': 'Ventrículos',
+      'Limbic system': 'Sistema límbico',
+      'Deep grey': 'Sustancia gris profunda',
+      'Basal ganglia': 'Ganglios basales',
+      'Thalamic nuclei': 'Núcleos talámicos',
+      'Cranial nerves': 'Nervios craneales',
+      'Meninges & dura': 'Meninges y duramadre',
+      'Cortex opacity': 'Opacidad de la corteza',
+      'Layers · build your view': 'Capas · construye tu vista',
+      'All': 'Todas',
+      'None': 'Ninguna',
+      'Reset view': 'Restablecer vista',
+      'Exit isolate': 'Salir del aislamiento',
+      'Isolate': 'Aislar',
+      'Selected': 'Seleccionado',
+      'Related': 'Relacionadas',
+      'Structure': 'Estructura',
+      'Structures': 'Estructuras',
+      'Loading…': 'Cargando…',
+      'Loading': 'Cargando',
+
+      // Niveles / lecciones
+      'Intro': 'Introducción',
+      'Core': 'Esencial',
+      'Advanced': 'Avanzado',
+      'stages': 'etapas',
+      'stage': 'etapa',
+      'completed': 'completadas',
+
+      // Capas principales
+      'Cortex': 'Corteza',
+      'White matter': 'Sustancia blanca',
+      'Diencephalon': 'Diencéfalo',
+      'Brainstem': 'Tronco encefálico',
+      'Cerebellum': 'Cerebelo',
+      'Arteries': 'Arterias',
+      'Sinuses': 'Senos venosos',
+      'Nerves': 'Nervios',
+      'Dura & falx': 'Duramadre y hoz cerebral',
+
+      // Estructuras especialmente útiles para el proyecto de epilepsia temporal mesial
+      'Hippocampus': 'Hipocampo',
+      'Amygdala': 'Amígdala',
+      'Amygdaloid body': 'Cuerpo amigdalino',
+      'Parahippocampal gyrus': 'Giro parahipocampal',
+      'Fusiform gyrus': 'Giro fusiforme',
+      'Temporal pole': 'Polo temporal',
+      'Insula': 'Ínsula',
+      'Piriform cortex': 'Corteza piriforme',
+      'Entorhinal cortex': 'Corteza entorrinal',
+      'Orbitofrontal cortex': 'Corteza orbitofrontal',
+      'Cingulum': 'Cíngulo',
+      'Fornix': 'Fórnix',
+      'Corpus callosum': 'Cuerpo calloso',
+      'Anterior commissure': 'Comisura anterior',
+      'Hippocampal commissure': 'Comisura hipocampal',
+      'Stria terminalis': 'Estría terminal',
+      'Thalamus': 'Tálamo',
+      'Hypothalamus': 'Hipotálamo',
+      'Caudate nucleus': 'Núcleo caudado',
+      'Putamen': 'Putamen',
+      'Nucleus accumbens': 'Núcleo accumbens',
+      'Globus pallidus external': 'Globo pálido externo',
+      'Globus pallidus internal': 'Globo pálido interno',
+      'Subthalamic nucleus': 'Núcleo subtalámico',
+      'Substantia nigra': 'Sustancia negra',
+      'Red nucleus': 'Núcleo rojo',
+      'Pulvinar': 'Pulvinar',
+      'Anterior nuclei of thalamus': 'Núcleos anteriores del tálamo',
+      'Mediodorsal nucleus': 'Núcleo mediodorsal',
+      'Lateral geniculate body': 'Cuerpo geniculado lateral',
+      'Medial geniculate body': 'Cuerpo geniculado medial',
+      'Mamillary body': 'Cuerpo mamilar',
+      'Septal nuclei': 'Núcleos septales',
+      'Lateral nucleus': 'Núcleo lateral',
+      'Basolateral complex': 'Complejo basolateral',
+      'Central nucleus': 'Núcleo central',
+      'Corticomedial group': 'Grupo corticomedial',
+      'Midbrain': 'Mesencéfalo',
+      'Pons': 'Puente',
+      'Medulla': 'Bulbo raquídeo',
+      'Uncus': 'Uncus',
+      'Inferior temporal gyrus': 'Giro temporal inferior',
+      'Middle temporal gyrus': 'Giro temporal medio',
+      'Superior temporal gyrus': 'Giro temporal superior',
+      'Collateral sulcus': 'Surco colateral',
+      'Cingulate gyrus': 'Giro del cíngulo',
+      'Lateral ventricle': 'Ventrículo lateral',
+      'Choroid plexus': 'Plexo coroideo',
+      'Optic tract': 'Tracto óptico',
+      'Inferior longitudinal fasciculus': 'Fascículo longitudinal inferior',
+      'Inferior fronto-occipital fasciculus': 'Fascículo fronto-occipital inferior',
+      'Uncinate fasciculus': 'Fascículo unciforme',
+      'Posterior cerebral artery': 'Arteria cerebral posterior',
+      'Middle cerebral artery': 'Arteria cerebral media',
+      'Internal carotid artery': 'Arteria carótida interna',
+      'Basilar artery': 'Arteria basilar'
+    }));
+
+    // Frases dinámicas y algunas combinaciones anatómicas frecuentes.
+    const patterns = [
+      [/^Search\s+(\d+)\s+structures…$/i, 'Buscar $1 estructuras…'],
+      [/^Search\s+(\d+)\s+structures\.\.\.$/i, 'Buscar $1 estructuras…'],
+      [/^(\d+)\s+matches$/i, '$1 coincidencias'],
+      [/^(\d+)\s+match$/i, '$1 coincidencia'],
+      [/^View all\s+(\d+)\s+layers$/i, 'Ver las $1 capas'],
+      [/^(\d+)\s+of\s+(\d+)\s+completed$/i, '$1 de $2 completadas'],
+      [/^(\d+)\s+stages$/i, '$1 etapas'],
+      [/^(\d+)\s+stage$/i, '$1 etapa'],
+      [/^Left hemisphere$/i, 'Hemisferio izquierdo'],
+      [/^Right hemisphere$/i, 'Hemisferio derecho'],
+      [/^Both hemispheres$/i, 'Ambos hemisferios'],
+      [/^Anterior cerebral artery$/i, 'Arteria cerebral anterior'],
+      [/^Middle cerebral artery$/i, 'Arteria cerebral media'],
+      [/^Posterior cerebral artery$/i, 'Arteria cerebral posterior'],
+      [/^Anterior communicating artery$/i, 'Arteria comunicante anterior'],
+      [/^Posterior communicating artery$/i, 'Arteria comunicante posterior'],
+      [/^Internal carotid artery$/i, 'Arteria carótida interna'],
+      [/^Basilar artery$/i, 'Arteria basilar'],
+      [/^Vertebral artery$/i, 'Arteria vertebral']
+    ];
+
+    function translateString(raw) {
+      if (!raw) return raw;
+      const leading = raw.match(/^\s*/)?.[0] || '';
+      const trailing = raw.match(/\s*$/)?.[0] || '';
+      const s = raw.trim();
+      if (!s) return raw;
+      if (exact.has(s)) return leading + exact.get(s) + trailing;
+      for (const [re, repl] of patterns) {
+        if (re.test(s)) return leading + s.replace(re, repl) + trailing;
+      }
+      return raw;
+    }
+
+    function translateNode(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const out = translateString(node.nodeValue);
+        if (out !== node.nodeValue) node.nodeValue = out;
+        return;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+      // Atributos visibles
+      for (const attr of ['title','aria-label','placeholder']) {
+        if (node.hasAttribute && node.hasAttribute(attr)) {
+          const old = node.getAttribute(attr);
+          const out = translateString(old);
+          if (out !== old) node.setAttribute(attr, out);
+        }
+      }
+
+      for (const child of node.childNodes) translateNode(child);
+    }
+
+    function translatePage() {
+      translateNode(document.body);
+      document.documentElement.lang = 'es';
+      document.title = 'Proyecto Cerebro 3D | Español';
+    }
+
+    const observer = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === 'characterData') translateNode(m.target);
+        for (const n of m.addedNodes || []) translateNode(n);
+      }
+    });
+
+    observer.observe(document.documentElement, { subtree: true, childList: true, characterData: true, attributes: false });
+    window.addEventListener('DOMContentLoaded', translatePage);
+    window.addEventListener('load', () => { translatePage(); setTimeout(translatePage, 600); setTimeout(translatePage, 1800); });
+    setInterval(translatePage, 2500);
+  })();
+  </script>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (q,root=document)=>root.querySelector(q);
+  const $$ = (q,root=document)=>Array.from(root.querySelectorAll(q));
+  const panel=$('#etm-panel'), launch=$('#etm-launch'), close=$('#etm-close'), toast=$('#etm-status');
+  const infoBox=$('#etm-anat-info');
+  let routeToken=0, toastTimer=null;
+  const anatomyInfo={
+    hippocampus:{title:'Hipocampo',text:'Estructura profunda del lóbulo temporal medial. Forma una prominencia en el piso del asta inferior del ventrículo lateral. Su extremo anterior se relaciona con la amígdala y su porción posterior se aproxima al esplenio del cuerpo calloso.'},
+    amygdala:{title:'Amígdala',text:'Complejo nuclear del temporal anteromedial, situado bajo el uncus y en el borde anterior de la formación hipocampal. Está por delante y parcialmente superpuesta a la cabeza del hipocampo.'},
+    parahippocampal:{title:'Giro parahipocampal',text:'Giro de la superficie medial e inferior del temporal. Se continúa con regiones de transición hacia la formación hipocampal; su porción anterior alberga la región entorrinal en términos citoarquitectónicos.'},
+    uncus:{title:'Uncus',text:'Extremo anteromedial, curvado, del giro parahipocampal. Se relaciona profundamente con la amígdala y con la cabeza del hipocampo.'},
+    temporalpole:{title:'Polo temporal',text:'Extremo anterior del lóbulo temporal. Sirve como referencia superficial anterior respecto al complejo mesial temporal.'},
+    fusiform:{title:'Giro fusiforme',text:'Giro de la superficie inferior temporal y occipitotemporal, lateral al giro parahipocampal. Es útil como referencia de propagación posterior/inferior.'},
+    amygdalaGroups:{title:'Grupos amigdalinos del atlas',text:'El modelo añade cuatro grupos funcionales registrados desde CIT168: lateral, basolateral, central y corticomedial. Son aproximaciones educativas, no una reconstrucción microanatómica de todos los núcleos.'},
+    fornix:{title:'Fórnix',text:'Principal vía eferente macroscópica de la formación hipocampal. Las fibras del alveus convergen en la fimbria y continúan como fórnix alrededor del tálamo.'},
+    hippocomm:{title:'Comisura hipocampal',text:'Fibras comisurales entre ambos lados asociadas a los crura del fórnix. Es una referencia anatómica importante cuando se discute conectividad interhemisférica mesial.'},
+    antcomm:{title:'Comisura anterior',text:'Haz comisural que cruza la línea media por delante de las columnas del fórnix y conecta regiones temporales y olfatorias de ambos hemisferios.'},
+    stria:{title:'Estría terminal',text:'Vía de salida de la amígdala que sigue un trayecto curvo relacionado con el ventrículo lateral hacia regiones septales e hipotalámicas.'},
+    cingulum:{title:'Cíngulo, tracto',text:'Haz de sustancia blanca dentro del giro del cíngulo que conecta regiones frontales, parietales y temporales mediales. No debe confundirse con el giro del cíngulo, que es corteza.'},
+    uncinate:{title:'Fascículo unciforme',text:'Tracto de asociación que conecta el temporal anterior con regiones orbitofrontales. Anatómicamente es relevante al estudiar redes temporofrontales.'},
+    ilf:{title:'Fascículo longitudinal inferior',text:'Tracto de asociación longitudinal de la sustancia blanca temporal-occipital. En el atlas se muestra como tubo esquemático registrado desde plantillas HCP1065.'},
+    callosum:{title:'Cuerpo calloso',text:'Mayor comisura cerebral. Es una referencia general de conectividad interhemisférica; no debe asumirse como vía de cada propagación bilateral sin evidencia específica.'},
+    thalamus:{title:'Tálamo',text:'Masa diencefálica medial y superior al mesencéfalo. El fórnix rodea al tálamo en su trayecto.'},
+    anteriorThalamus:{title:'Núcleos anteriores del tálamo',text:'Grupo talámico relacionado anatómicamente con el circuito de Papez mediante conexiones con cuerpos mamilares y giro del cíngulo.'},
+    mammillary:{title:'Cuerpo mamilar',text:'Estructura hipotalámica que recibe fibras poscomisurales del fórnix y participa en el circuito límbico clásico.'},
+    cingulateGyrus:{title:'Giro del cíngulo',text:'Corteza medial que rodea superiormente al cuerpo calloso. Se conecta con la región parahipocampal a través del sistema del cíngulo.'},
+    ventricle:{title:'Ventrículo lateral',text:'El hipocampo forma una prominencia en el piso del asta inferior. Esta relación ayuda a orientarlo cuando la corteza está transparente.'},
+    choroid:{title:'Plexo coroideo',text:'Se relaciona con la fisura coroidea del asta inferior. La fimbria y el fórnix discurren próximos a esta región.'},
+    insula:{title:'Ínsula',text:'Corteza profunda dentro de la cisura lateral, cubierta por los opérculos frontal, parietal y temporal. Puede formar parte de redes de propagación temporal-insular.'},
+    orbitofrontal:{title:'Región orbitofrontal',text:'Superficie inferior del lóbulo frontal. Su conexión con el temporal anterior se relaciona anatómicamente con el fascículo unciforme.'},
+    entorhinal:{title:'Corteza entorrinal',text:'Región cortical de la porción anterior del giro parahipocampal y principal interfaz cortical de la formación hipocampal. Puede no estar segmentada como malla independiente en este atlas.'},
+    piriform:{title:'Corteza piriforme',text:'Corteza olfatoria primaria de la región anteromedial temporal. Es anatómicamente relevante en redes temporales, pero puede no estar separada como malla propia en el atlas.'},
+    pca:{title:'Arteria cerebral posterior',text:'Arteria visible en el atlas para orientación vascular. Sus ramas temporales y coroideas se relacionan con la región temporal medial, pero este visor no representa la microvascularización individual.'}
+  };
+  function say(msg){ if(!toast) return; toast.textContent=msg; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>toast.classList.remove('show'),1800); }
+  function showInfo(key){ const d=anatomyInfo[key]; if(!d||!infoBox) return; infoBox.innerHTML='<strong>'+d.title+'</strong><p>'+d.text+'</p>'; }
+  function visibleText(el){ return (el?.innerText||el?.textContent||'').trim(); }
+  function findButton(names){ const arr=Array.isArray(names)?names:[names]; return $$('button').find(b=>arr.some(n=>visibleText(b).toLowerCase()===n.toLowerCase() || visibleText(b).toLowerCase().includes(n.toLowerCase()))); }
+  function nativeSet(el,val){ if(!el)return false; const proto=Object.getPrototypeOf(el); const desc=Object.getOwnPropertyDescriptor(proto,'value')||Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value'); if(desc?.set) desc.set.call(el,val); else el.value=val; el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true})); return true; }
+  function searchInput(){ return $$('input').find(i=>/search|buscar/i.test(i.placeholder||'') || /search|buscar/i.test(i.getAttribute('aria-label')||'')); }
+  function setSearch(term){ const input=searchInput(); if(!input){ say('Esperando que cargue el atlas…'); return false; } input.focus(); nativeSet(input,term); say('Buscando: '+term); return true; }
+  function clickByText(names){ const b=findButton(names); if(b){ b.click(); return true; } return false; }
+  function setHemisphere(side){ const map={left:['Izquierdo','Left'],right:['Derecho','Right'],both:['Ambos','Both']}; if(clickByText(map[side])) say(side==='both'?'Ambos hemisferios':side==='right'?'Hemisferio derecho':'Hemisferio izquierdo'); }
+  function clearSearch(){ const i=searchInput(); if(i) nativeSet(i,''); }
+  function isolate(){ setTimeout(()=>{ if(!clickByText(['Aislar','Isolate'])) clickByText(['Enfocar','Focus']); },450); }
+  function focusStructure(term, side){ if(side) setHemisphere(side); setTimeout(()=>{ if(setSearch(term)) isolate(); }, side?220:0); }
+  function setCortexOpacity(v=.16){
+    const sliders=$$('input[type="range"]');
+    let target=sliders.find(r=>{
+      const p=r.parentElement?.innerText||''; const gp=r.parentElement?.parentElement?.innerText||''; return /cortex opacity|opacidad de la corteza/i.test(p+' '+gp);
+    }) || sliders[0];
+    if(!target){ say('No encontré el control de opacidad'); return; }
+    const min=Number(target.min||0), max=Number(target.max||1); const value=min+(max-min)*v;
+    nativeSet(target,String(value)); say('Corteza semitransparente');
+  }
+  function reset(){ routeToken++; clearSearch(); if(!clickByText(['Restablecer vista','Reset view','Restablecer','Reset'])) say('Búsqueda limpiada'); else say('Atlas restablecido'); }
+  const routes={
+    anterior:[{term:'hippocampus',side:'right',label:'Hipocampo derecho'},{term:'amygdaloid body',side:'right',label:'Amígdala derecha'},{term:'temporal pole',side:'right',label:'Polo temporal derecho'},{term:'entorhinal',side:'right',label:'Corteza entorrinal'}],
+    posterior:[{term:'hippocampus',side:'right',label:'Hipocampo derecho'},{term:'amygdaloid body',side:'right',label:'Amígdala derecha'},{term:'parahippocampal',side:'right',label:'Región parahipocampal posterior'},{term:'fusiform',side:'right',label:'Giro fusiforme'}],
+    bilateral:[{term:'hippocampus',side:'right',label:'Hipocampo derecho'},{term:'amygdaloid body',side:'right',label:'Amígdala derecha'},{term:'orbital',side:'right',label:'Región orbitofrontal derecha'},{term:'orbital',side:'left',label:'Región orbitofrontal izquierda'},{term:'hippocampus',side:'left',label:'Hipocampo izquierdo'},{term:'amygdaloid body',side:'left',label:'Amígdala izquierda'}]
+  };
+  const tours={
+    mesial:[{term:'temporal pole',side:'right',label:'Polo temporal'},{term:'uncus',side:'right',label:'Uncus'},{term:'amygdaloid body',side:'right',label:'Amígdala'},{term:'hippocampus',side:'right',label:'Hipocampo'},{term:'parahippocampal',side:'right',label:'Giro parahipocampal'},{term:'fusiform',side:'right',label:'Giro fusiforme'}],
+    limbic:[{term:'hippocampus',side:'right',label:'Hipocampo'},{term:'fornix',label:'Fórnix'},{term:'mamillary body',label:'Cuerpo mamilar'},{term:'anterior nuclei',label:'Núcleos anteriores del tálamo'},{term:'cingulate gyrus',side:'right',label:'Giro del cíngulo'},{term:'parahippocampal',side:'right',label:'Región parahipocampal'}],
+    commissural:[{term:'hippocampus',side:'right',label:'Hipocampo derecho'},{term:'hippocampal commissure',label:'Comisura hipocampal'},{term:'hippocampus',side:'left',label:'Hipocampo izquierdo'},{term:'anterior commissure',label:'Comisura anterior'},{term:'corpus callosum',label:'Cuerpo calloso'}]
+  };
+  async function playRoute(name){ const token=++routeToken; const seq=routes[name]||[]; setCortexOpacity(.16); for(const step of seq){ if(token!==routeToken) return; say(step.label); focusStructure(step.term,step.side); await new Promise(r=>setTimeout(r,2600)); } if(token===routeToken){ setHemisphere('both'); say('Recorrido terminado'); } }
+  async function playTour(name){ const token=++routeToken; const seq=tours[name]||[]; setCortexOpacity(.13); for(const step of seq){ if(token!==routeToken) return; say('Anatomía: '+step.label); focusStructure(step.term,step.side); await new Promise(r=>setTimeout(r,2300)); } if(token===routeToken){ setHemisphere('both'); say('Tour anatómico terminado'); } }
+  launch?.addEventListener('click',()=>panel?.classList.toggle('etm-hidden'));
+  close?.addEventListener('click',()=>panel?.classList.add('etm-hidden'));
+  document.addEventListener('click',e=>{
+    const st=e.target.closest('[data-structure]'); if(st){ if(st.dataset.infoKey) showInfo(st.dataset.infoKey); focusStructure(st.dataset.structure); return; }
+    const t=e.target.closest('[data-tour]'); if(t){ playTour(t.dataset.tour); return; }
+    const r=e.target.closest('[data-route]'); if(r){ playRoute(r.dataset.route); return; }
+    const a=e.target.closest('[data-action]'); if(!a) return;
+    switch(a.dataset.action){
+      case 'deep': setCortexOpacity(.16); break; case 'both': setHemisphere('both'); break; case 'left': setHemisphere('left'); break; case 'right': setHemisphere('right'); break; case 'reset': reset(); break; case 'stop': routeToken++; say('Recorrido detenido'); break;
+    }
+  });
+  // Atajo: tecla M abre/cierra el panel, excepto si se está escribiendo.
+  document.addEventListener('keydown',e=>{ if((e.key==='m'||e.key==='M') && !/INPUT|TEXTAREA/.test(document.activeElement?.tagName||'')) panel?.classList.toggle('etm-hidden'); });
+})();
+</script>
+
+</body>
+</html>
